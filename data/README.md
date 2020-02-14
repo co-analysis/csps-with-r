@@ -1,0 +1,1 @@
+The synthetic CSPS data set should go in this folder: `csps_synth.dta`
