@@ -106,7 +106,7 @@ There are many benefits to having one folder per analytical project. It means yo
 
 RStudio has a system that helps you set this up. You can create an 'RStudio Project' like this:
 
-1. Open RStudio (the icon is a white R inside a blue circle; see top of this document)
+1. Open RStudio (the icon is a white R inside a blue circle)
 2. File > New Project...
 3. New Directory > New Project
 4. Give your project a meaningful name in the 'Directory Name' box (e.g. `csps-r` for this session)
@@ -255,7 +255,7 @@ my_num * my_num + 6
 * Make an object called `val1` that stores the value 543
 * Make another object called `val2` that stores the value 612
 * Make a third object called `calc` that is the multiplication (`*`) of `val1` and `val2` 
-* What value do you get when you print `calculation`?
+* What value do you get when you print `calc`?
 
 `r countdown(minutes = 1, seconds = 0, style = "position: relative; width: min-content;")`
 
@@ -293,9 +293,9 @@ class(dept_names)
 </div>
 <br>
 
-So we've create objects composed of a single values (`my_num`) and a vector (`dept_names`). You can think of these as being zero-dimensional and one-dimensional, respectively.
+So we've create objects composed of a single values (`my_num`) and a vector of values (`dept_names`).
 
-The next step would be two dimenions: a table with rows and columns. Tables of data with rows and columns are called 'data frames' in R and are effectively a bunch of vectors of the same length stuck together.
+The next step would be to combine a number of vectors together to create a table with rows and columns. Tables of data with rows and columns are called 'data frames' in R and are effectively a bunch of vectors of the same length stuck together.
 
 Here's an example of a data frame built from scratch:
 
@@ -451,8 +451,6 @@ The variables are in the synthetic data set are:
 * ees (a derived variable that translates each engagement question score to a percentage and takes the mean)
 * mw_p (a derived variable that gives the proportion of responses to the 'my work' theme questions that were positive, i.e. 'agree' or 'strongly agree')
 
-# Loading data
-
 # Read
 
 The {haven} package has a function called `read_stata()` that you can pass the file path to. Let's read in the data with this function and name it 'data'.
@@ -460,6 +458,8 @@ The {haven} package has a function called `read_stata()` that you can pass the f
 ```{r haven-read}
 data <- read_stata(file = "data/csps_synth.dta")
 ```
+
+This will read the data in as a 'tibble', a fancier type of data frame that's used by the tidyverse packages. For example, when printed to the console, tibbles use colour coding and are truncated to fit.  
 
 <br>
 <div class="activity"> `r icon::fa("edit")` <b>Activity</b>
@@ -580,7 +580,8 @@ We're going to make use of some [logical operators](https://stat.ethz.ch/R-manua
 | Symbol | Meaning | Example |
 | :-- | :-- | :-- |
 | `==` |  Equal to |  `5 == 2 + 3` returns `TRUE` |
-| `%in%` | Not equal to | `4 == 6` returns `TRUE` |
+| `!=` |  Not equal to |  `5 != 3 + 3` returns `TRUE` |
+| `%in%` | Shortcut to match to a vector | `4 %in% c(2, 4, 6)` returns `TRUE` |
 | `>`, `<` | Greater than, less than | `2 < 3` returns `TRUE` |
 | `>=`, `<=` | Equal or greater than, equal or less than | `5 <= 5` returns `TRUE` |
 | `&` | And (helps string together multiple filters) | `1 < 2 & 5 == 5` returns `TRUE` |
@@ -653,9 +654,10 @@ select(data_dummy, Z02, J03, dummy)
 <br>
 <div class="activity"> `r icon::fa("edit")` <b>Activity</b>
 
-Use `mutate()` to create a dummy column where 
-* people who responded with 'strongly agree' (`5`) to B01 *and* B02 get a `1`
-* and everyone else gets a `0`
+Use `mutate()` to create a dummy column where:
+
+* people who responded with 'strongly agree' (`5`) to both B01 *and* B02 get a `1`
+* everyone else gets a `0`
 
 `r countdown(minutes = 2, seconds = 0, style = "position: relative; width: min-content;")`
 
@@ -682,7 +684,7 @@ glimpse(data_lbl_chr)
 <br>
 <div class="tip"> `r icon::fa("lightbulb")` <b>Tip</b>
 
-* There's more than one function called `as_factor()`; how can we be disambiguous?
+* There's more than one function called `as_factor()` -- how can we resolve this?
 * We can specify that we mean the one from the {haven} package by writing it in the form `package::function()`
 
 </div>
@@ -706,7 +708,7 @@ Let's create a small trivial data frame that provides a lookup from department c
 ```{r dept-lookup}
 lookup <- tibble(
   OverallDeptCode = c("ORGA", "ORGB", "ORGC"),
-  dept_full_name = c("Dept of A", "Ministry for B", "Agency of C")
+  dept_full_name = c("Dept for A", "Ministry of B", "C Agency")
 )
 
 print(lookup)
@@ -764,8 +766,8 @@ We'll use a special pipe operator -- `%>%` -- that will read as 'take what's on 
 ```{r eval=FALSE}
 dataset %>%
   do something %>%
-  do something else %>%
-  something elese again
+  do something %>%
+  do something
 ```
 
 A real example with our data might look like this:
@@ -789,7 +791,6 @@ So the steps for creating the `data_piped` object are:
 This is a bit like a recipe. And it's easier to read.
 
 You also repeat yourself fewer times. We only to name the `data` object once, a the very start. This minimises the chance that you'll accidentally name the wrong object by mistake.
-
 
 # Summarise
 
@@ -828,9 +829,24 @@ data %>%
 
 # Plot
 
-We could have a whole separate session on visualising data (maybe we will).
+We could have a whole separate session on visualising data.
 
-For now, let's look at a simple bar chart of the answers to question B01 using the `ggplot()` function from the {ggplot2} package.
+The tidyverse package for plotting is called {ggplot2}. The 'gg' stands for 'grammar of graphics'. It's a system to build up a graphic using common components including:
+
+* data
+* 'geoms' (marks that represent the data)
+* a coordinate system
+
+You also supply aesthetic properties like size, colour, x and y locations.
+
+
+<center><img src="img/ggplot2-cheat.png" width="50%"></center><br>
+
+To add these layers you use a `+`. Imagine you've created a blank canvas and you're building up your image layer by layer. (This is different to using the pipe, `%>%`, which is passing information from the left-hand side to the right-hand side.)
+
+The great thing about building plots with code is that you can produce them with the same styles very quickly without all the manual adjustments that might be required in some other programs.
+
+For now, let's look at a simple bar chart of the answers to question B01 using the `ggplot()` function from {ggplot2}.
 
 ```{r plot-simple}
 # Prepare the data
@@ -843,17 +859,19 @@ plot_data <- data %>%
   )  
 
 # Plot the data
-ggplot(plot_data, aes(x = B01, y = n)) +
+ggplot(
+  plot_data,
+  aes(x = B01, y = n)) +
   geom_col()
 ```
 
 What just happened? We:
 
 * gave ggplot() the dataset, `plot_data`
-* gave it some aesthetics, `aes()`; in this case the x and y variables
+* gave it some aesthetic mappings, `aes()` (in this case, the x and y variables)
 * used the column geom, `geom_col()`, to make a bar chart
 
-We can spruce this up a little.
+We can spruce this up a little by adding on additional things like a theme or labels.
 
 ```{r plot-stacked}
 ggplot(plot_data, aes(x = B01, y = n))  +
@@ -870,7 +888,7 @@ ggplot(plot_data, aes(x = B01, y = n))  +
   ylab("Count of responses")  # y axis title
 ```
 
-But we could also split each department's results into its own 'facet'.
+But we could also split each department's results into a grid of small multiples, or 'facets', with `facet_grid()`.
 
 ```{r plot-facet}
 ggplot(plot_data, aes(x = B01, y = n))  +
@@ -890,3 +908,24 @@ ggplot(plot_data, aes(x = B01, y = n))  +
   ) 
 ```
 
+{ggplot2} is a very powerful graphics package that can crate all sorts of charts. Check out [the R Graph Gallery](https://www.r-graph-gallery.com/) for some more examples.
+
+# Learn more
+
+## R and RStudio
+
+* [ModernDive: a 'modern dive into  and the tidyverse'](https://moderndive.com/index.html)
+* [Software Carpentry's Programming with R](http://swcarpentry.github.io/r-novice-inflammation/){target='_blank'}
+* [Swirl](http://swirlstats.com/){target='_blank'} teaches you R interactively, from within RStudio itself
+* Further information about R Projects is available from the [RStudio Support pages](https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects){target='_blank'}
+* [Starting data analysis/wrangling with R: Things I wish I'd been told](http://reganmian.net/blog/2014/10/14/starting-data-analysiswrangling-with-r-things-i-wish-id-been-told/){target='_blank'} by Stian Håklev
+* [Basics of 'tidy' data and the 'tidyverse' of packages](http://rpubs.com/aelhabr/tidyverse-basics){target='_blank'}
+* [RStudio cheat sheets](https://www.rstudio.com/resources/cheatsheets/){target='_blank'}, including help with packages like {dplyr} and {ggplot2}
+
+## Getting help
+
+* Many departments have R groups and specialists -- see if you can join a network or identify other R users in your organisation
+* Many departments also have [Coffee & Coding sessions](https://ukgovdatascience.github.io/rap-website/resource-coffee-and-coding.html) for learning about R, asking questions and sharing ideas
+* Often it helps to produce a small [reproducible example](https://www.tidyverse.org/help/#reprex){target='_blank'} (a 'reprex') of your code if you run into trouble
+* [Getting help with R](https://support.rstudio.com/hc/en-us/articles/200552336-Getting-Help-with-R){target='_blank'} page of resources from RStudio
+* Explore questions and answers tagged as `r` on [StackOverflow](https://stackoverflow.com/questions/tagged/r){target='_blank'}, or even ask your own question
