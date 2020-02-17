@@ -846,6 +846,7 @@ To add these layers you use a `+`. Imagine you've created a blank canvas and you
 
 The great thing about building plots with code is that you can produce them with the same styles very quickly without all the manual adjustments that might be required in some other programs.
 
+## Simple plots
 For now, let's look at a simple bar chart of the answers to question B01 using the `ggplot()` function from {ggplot2}.
 
 ```{r plot-simple}
@@ -906,6 +907,95 @@ ggplot(plot_data, aes(x = B01, y = n))  +
     cols = vars(OverallDeptCode),  # one column per department
     scales = "free"  # scales are relative to the facet
   ) 
+```
+
+## Advanced plot
+We can also use {ggplot} to recreate the style of bar charts used in the PDF reports of People Survey results. First we need to process the data to get the data for ORG B, reshape it into a plottable format, and calculate percentages.
+
+``` {r plot-data2}
+plot_data2 <- data %>%
+  filter(OverallDeptCode == "ORGB") %>%
+  select(B47:B51) %>%
+  mutate_all(haven::as_factor) %>%      # convert the variables to factors
+  tidyr::pivot_longer(                  # turn the data into 'long' format
+    cols = everything(),                #    using all the columns
+    names_to = "question",              #    assign names to variable 'question'
+    values_to = "value"                 #    assign values to variable 'value' 
+    ) %>%
+  tidyr::drop_na(value) %>%             # drops any missing responses
+  count(                                # count the combinations of:
+    question,                           #   question, and
+    value,                              #   value, and
+    name = "response_count") %>%        #   give the count a specific name
+  add_count(
+    question,                           # add an extra count by question
+    wt = response_count,                #   summing the 'wt' variable
+    name = "question_count") %>%        #   give it a specific name
+  mutate(
+    pc = response_count/question_count, # calculate responses as % of question
+    value = forcats::fct_rev(value),    # character strings are often better as
+    question = forcats::fct_rev(        #   factors when plotting, but sometimes
+      forcats::as_factor(question)      #   you need to reverse their 'order'
+      )
+  )
+
+print(plot_data2)
+
+```
+
+We now have a dataset that has counted the responses for each question-value pair (`response_count`), the number of responses for each question (`question_count`) and a percentage response (`pc`), for questions B47-B52 for respondents in ORGB.
+
+We can now plot this data, rather than Department we'll be plotting the questions on the "x-axis" and our calculated percentage on the "y-axis" (we'll actually flip these axis, but that's one of the last things we do, so it's best to still think of these in their original x-y positions). We can also add data labels, using `geom_text()`. The PDF survey reports use a colourblind friendly pink-green scale from the [{RColorBrewer}](https://cran.r-project.org/package=RColorBrewer) package, which provides the palettes developed by the [Color Brewer](http://colorbrewer2.org/) project. Finally, we apply some customisation to the theme to remove the axis titles, reposition the legend, give the legend keys an outline, and format the title text.
+
+``` {r plot-stacked2}
+
+ggplot(plot_data2, aes(x = question, y = pc)) +
+  geom_col(aes(fill = value), width = 0.75, colour = "gray60", size = 0.2) +
+  geom_text(
+    aes(
+      label = scales::percent(pc, accuracy = 1),
+      colour = value),
+    position = position_fill(vjust = 0.5),
+    size = 3,
+    show.legend = FALSE) +
+  # geom_text adds text labels, we set the label aesthetic to the text
+  # we've also mapped the colour aesthetic to vary the label text's colour
+  # text positioning can be tricky, this is why the value factor was reversed
+  # when we created plot_data2 ¯\_(ツ)_/¯
+  scale_y_reverse() +
+  # reverse the y-axis so that strongly agree will be on the left-hand side
+  scale_fill_brewer(palette = "PiYG", direction = -1) +
+  # the PiYG palette is the same as is used in the highlights reports
+  # it is colourblind friendly, so recommended instead of basic red-green
+  scale_colour_manual(
+    values = c("Strongly agree" = "white", 
+               "Agree" = "gray20",
+               "Neither agree nor disagree" = "gray20",
+               "Disagree" = "gray20",
+               "Strongly disagree" = "white")) +
+  # this provides the colours for the text labels, so that the labels for the 
+  # 'strongly' values have white text, and the others have grey text
+  coord_flip() +
+  # flip the axis
+  labs(
+    title = "Employee engagement question results",
+    subtitle = "Almost two-thirds of staff are proud to work for ORG B",
+    caption = "Source: B47-B52, ORGB, synthetic CSPS data") +
+  theme_light() +
+  theme(
+    panel.grid = element_blank(),
+    # element_blank() removes an element from the plot
+    panel.border = element_blank(),
+    axis.title.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.title.y = element_blank(),
+    axis.ticks = element_blank(),
+    legend.position = "top",
+    legend.title = element_blank(),
+    legend.key.size = unit(1, "char"),
+    legend.margin = margin(1,0,0,0, "char"),
+    plot.title = element_text(face = "bold"))
+
 ```
 
 {ggplot2} is a very powerful graphics package that can crate all sorts of charts. Check out [the R Graph Gallery](https://www.r-graph-gallery.com/) for some more examples.
