@@ -86,7 +86,7 @@ Why R? It:
 * has highly configurable graphics, including interactives
 * has tools for building apps and interactive 'dashboards' to let users explore your data
 
-RStudio is a popular and well-supported piece of software for editing and running R code for both beginners and advanced users. It's also free of charge and the company behind it is [a public benefit coprporation](https://blog.rstudio.com/2020/01/29/rstudio-pbc) with a commitment to producing open source software.
+RStudio is a popular and well-supported piece of software for editing and running R code for both beginners and advanced users. It's also free of charge and the company behind it is [a public benefit corporation](https://blog.rstudio.com/2020/01/29/rstudio-pbc) with a commitment to producing open source software.
 
 ## {cspstools}
 
