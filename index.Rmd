@@ -466,18 +466,29 @@ The variables are in the synthetic data set are:
 
 Ordinarily we would send you the data for your organisation on request. For this session, we've prepared the synthetic data set as a Stata-format (.dta) file.
 
-You can download it to your machine with the `download.file()` function. Save it to the `data/` folder of your project using the `destfile` argument.
+You can [download the data from the Cabinet Office GitHub page](https://github.com/co-analysis/csps-synth/blob/master/output/csps_synth.dta). Visit the link, click the 'download' button and save the downloaded file to the `data/` folder of your project.
+
+<br>
+<div class="tip"> `r icon::fa("lightbulb")` <b>Tip</b>
+
+You could also download the file to your machine with the `download.file()` function. The first argument is `url`; the file path to where the data are saved on the internet. The `destfile` argument is where you want to save the file on your computer; we want to put it in `data/`.
 
 ```{r download-file, eval=FALSE}
+# The location of the data on the internet
+path <- "https://github.com/co-analysis/csps-synth/blob/master/output/csps_synth.dta?raw=true"
+
+# Download from the internet to your computer
 download.file(
-  url = "https://github.com/co-analysis/csps-synth/blob/master/output/csps_synth.dta",
-  destfile = "data/csps_synth.dta"  # where to save it
+  url = path,  # the path to the file on the internet
+  destfile = "data/csps_synth.dta",  # where to save the file
+  mode = "wb"  # save as a 'binary file'
 )
 ```
 
-Alternatively, you can visit the link and click the 'download' button,then save it to the `data/` folder of your project.
+</div>
+<br>
 
-Now take a look at the 'Files' pane in RStudio. Navigate into the `data/` folder. The .dta file should now be in there.
+Now take a look at the 'Files' pane in RStudio and navigate into the `data/` folder. The `csps_synth.dta` file should now be in there.
 
 # Read
 
