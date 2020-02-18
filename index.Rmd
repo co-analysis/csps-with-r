@@ -28,9 +28,9 @@ library(countdown)  # remotes::install_github("gadenbuie/countdown")
 
 This session is a *very* brief introduction to R and RStudio for beginners, with reference to Civil Service People (CSPS) Data.
 
-There is a lot of extra material that could be covered, but is left out for brevity.
+There's a lot of material about R and about the CSPS data that we aren't going to have time to cover today.
 
-We'll be developing this guidance and making it freely available on the web.
+We'll be developing this guidance and making it freely available on the web. It will include more information on tidying, analysing, plotting and reporting.
 
 ## Background
 
@@ -43,16 +43,17 @@ Many tools like Excel, SPSS and Stata are used across government to analyse the 
 
 * What program do you use for analysis?
 * Have you used R before?
-* What makes you want to learn R?
+* What makes you want to use R?
 
 </div>
 <br>
 
 Of course, every analyst and every department is welcome to use the tools that are available to them, that they understand and that get the job done. 
-
-Having said this, we advocate specifically the [statistical programming language R](https://www.r-project.org/about.html) and the [RStudio](https://rstudio.com/) code editor.
+Having said this, we're advocating for the [statistical programming language R](https://www.r-project.org/about.html) and the [RStudio](https://rstudio.com/) code editor.
 
 # R and RStudio
+
+## Why?
 
 Why R? It:
 
@@ -65,7 +66,9 @@ Why R? It:
 
 RStudio is a popular and well-supported piece of software for editing and running R code for both beginners and advanced users. It's also free of charge and the company behind it is [a public benefit coprporation](https://blog.rstudio.com/2020/01/29/rstudio-pbc) with a commitment to producing open source software.
 
-The CSPS team are developing some R-based tools for analysing CSPS data specifically. You will be able to download a package that contains common functions for analysing CSPS data. This will help provide consistency for analysis and reporting and make tasks easier to perform and more reproducible. The tools will be shared in the open for anyone to use and so that anyone can help to improve them.
+## {cspstools}
+
+In particular, the CSPS team are developing some R-based tools for analysing CSPS data specifically. You will be able to download a package called {cspstools} that contains common functions for analysing CSPS data. This will help provide consistency in analysis and reporting and make tasks easier to perform and more reproducible. The tools will be shared in the open for anyone to use and so that anyone can help to improve them.
 
 ## Download
 
@@ -75,8 +78,6 @@ Before starting, you should download:
 * [RStudio Desktop](https://rstudio.com/products/rstudio/download/) (open-source license)
 
 Both are free, but you might need to get in touch with your IT team to get them insalled to your computer.
-
-
 
 ## RStudio layout
 
@@ -117,7 +118,11 @@ RStudio has a system that helps you set this up. You can create an 'RStudio Proj
 
 This creates a folder where you specified that contains an RStudio Project file (extension '.Rproj'). This folder is the 'home' of your project and this is where you should house all the files and code that you need.
 
-There are many ways to organise this folder. For this session we'll keep things simple:
+For now, create two new folders -- `data` and `output` -- in your Project folder (we'll be using these later).
+
+We haven't created any R script files yet, but they'll go in the project folder too.
+
+This means we'll get a folder structure like this:
 
 ```
 csps-r/              # the project folder
@@ -127,17 +132,13 @@ csps-r/              # the project folder
   └── training.R     # R script files
 ```
 
-* Create two new folders -- `data` and `output` -- in your Project folder (we'll be using these later)
-* We haven't created the R script files yet, but they'll go in the project folder
-
-To access your RStudio Project in future, navigate to the project folder and double-click your R Project file, which has the .Rproj extension (e.g. `your-project.Rproj`). It will open in the same state that you left it when you last closed it.
-
+To access your RStudio Project in future, navigate to the project folder and double-click your R Project file, which has the .Rproj extension (e.g. `your-project.Rproj`). It will open RStudio in the same state that you left it when you last closed it.
 
 ## Start a new script
 
 You'll write your code into a special text file called an R script, which has the extension `.R`.
 
-Having opened the R Project (.Rproj) file for your analysis, open a new script by clicking `File` > `New File` > `R script`. A new blank script will appear in a new pane in the upper left of the RStudio window.
+Having opened the R Project (.Rproj) file for your analysis, open a new script by clicking File > New File > R script. A new blank script will appear in a new pane in the upper left of the RStudio window.
 
 You can type or copy and paste code into this document. This serves as a record of the actions you used to analyse the data step-by-step.
 
@@ -160,7 +161,7 @@ In an R script, any characters prefixed with a hash (`#`) will be recognised as 
 
 Comments are really helpful for letting people to understand what your code is doing. Try to keep a narrative going throughout your code to explain what it's doing. Be explicit -- it might be obvious to you right now why a certain line code is being written, but you might come back in a few months time and forget.
 
-It's also good to use comments to explain what each block of code is doing and to explain particular lines of code. Here's an example of comments being used for some dummy code:
+It's also good to use comments to explain what each block of code is doing and to explain particular lines of code. Don't worry about the code itself, but here's an example of comments in use:
 
 ```{r comments, eval=FALSE}
 # Subset the data
@@ -228,13 +229,13 @@ print(my_num)
 <div class="tip"> `r icon::fa("lightbulb")` <b>Tip</b>
 
 * You can actually print an object by running it's name alone:
-* Running `my_num` is euivalent to `print(my_num)`
+* Running `my_num` is equivalent to `print(my_num)`
 * I'll be using `print()` throughout to be more explicit
 
 </div>
 <br>
 
-The real benefit to this is that you don't have to repeat yourself every time you want to use that particular calculation. For example, you can refer to it in new expressions:
+The real benefit to this is that you don't have to repeat yourself every time you want to use that particular calculation. For example, you can refer to the object in new expressions:
 
 ```{r use-object}
 my_num * my_num + 6
@@ -266,15 +267,17 @@ my_num * my_num + 6
 
 We stored a numeric value in the last section. We can do more than just store one item of data at a time though.
 
-This next chunk of code combines multiple elements with the `c()` command. This kind of multi element object is called a 'vector'.
+This next chunk of code _combines_ multiple elements with the `c()` command. This kind of multi-element object is called a 'vector'.
 
-Here's a vector that contains text rather than numbers. You put character strings inside quotation marks (`""`) to identify them as such. Numbers don't need to be in quotation marks (unless you want them to be stored as text, specifically).
+Here's a vector that contains text rather than numbers. You put character strings inside quotation marks (`""`), which isn't needed for numbers.
 
 ```{r vectors}
 # Create an example vector
 dept_names <- c("DfE", "DHSC", "DfT")  # combine some values
 print(dept_names)  # have a look at what the object contains
 ```
+
+So each of the elements of the object was returned.
 
 You can see what 'class' your object is at any time with the `class()` function. 
 
@@ -349,12 +352,12 @@ You can use type a question mark followed by a function name to learn about its 
 * Here's an example that adds two provided numbers together:
 
 ```{r example-function}
-# Define a function add two numbers
+# Define a function that adds two numbers
 add_nums <- function(val_a, val_b) {
   val_a + val_b
 } 
 
-add_nums(val_a = 3, val_b = 4)  # use the 
+add_nums(val_a = 3, val_b = 4)  # use the function
 ```
 </div>
 <br>
@@ -363,12 +366,12 @@ add_nums(val_a = 3, val_b = 4)  # use the
 
 Functions can be bundled into packages. A bunch of packages are pre-installed with R, but there are thousands more available for download. These packages extend the basic capabilities of R or improve them.
 
-Packages can be installed to your computer using the `install.packages()` function. This automatically fetches and downloads packages from a centralised package database on the internet called [CRAN](https://cran.r-project.org). CRAN accepts packages that meet strict quality criteria, so you can be assured that what you download is of an appropriate standard.
+Packages can be installed to your computer using the `install.packages()` function. This automatically fetches and downloads packages from a centralised package database on the internet called [CRAN](https://cran.r-project.org), which only accepts packages that meet strict quality criteria.
 
 <br>
 <div class="tip"> `r icon::fa("lightbulb")` <b>Tip</b>
 
-* Packages can be downloaded from places other than CRAN
+* Packages _can_ be downloaded from places other than CRAN
 * You can download packages from open online repositories like GitHub
 * You may need your IT team to authorise or install packages for you
 
@@ -377,7 +380,7 @@ Packages can be installed to your computer using the `install.packages()` functi
 
 We're going to use a few packages to help us:
 
-* [{haven}](https://haven.tidyverse.org/) for reading a range of file types, like Stata (.dta) and SPSS (.sav)
+* [{haven}](https://haven.tidyverse.org/) for reading a range of file types, like Stata's (.dta) and SPSS's (.sav)
 * [{dplyr}](https://dplyr.tidyverse.org/) for data cleaning and preparation
 * [{ggplot2}](https://ggplot2.tidyverse.org/) for plotting
 
@@ -392,22 +395,22 @@ We're going to use a few packages to help us:
 </div>
 <br>
 
-So we can install all these packages and more at once with:
+Typically you would type `install.packages("packagename")` to download the package, but we can use the following to install the packages from the tidyverse all at once:
 
 ```{r install-packages, eval=FALSE}
 install.packages("tidyverse")
 ```
 
-You only need to run the installation function once per package. At that point it's downloaded to your machine, so you don't need to install it again.
+You only need to run the installation function once per package on your machine.
 
-You use `library("package_name")` to tell R to make available the functions from a package in your script. You will need to run this once at the start of your session to use that package's functions.
+Each time you start a new session you'll need to run `library("package_name")` to tell R to make available the functions from a that package so you can use them in your script.
 
-So now we have the `tidyverse` packages installed we can call them with the `library()` function so we can use them.
+So now we have the `tidyverse` packages installed we can call the packages we need with `library()`.
 
 ```{r libraries}
-library("haven")
-library("ggplot2")
-library("dplyr")
+library("haven")    # data reading
+library("ggplot2")  # plotting
+library("dplyr")    # data wrangling
 ```
 
 Sometimes a message will be printed to tell you a bit more about the package, which is what happens for {dplyr}.
@@ -426,23 +429,9 @@ In short, this means that the data distributions within the variables are preser
 
 We've also restricted the number of variables (columns) and rows (responses) to keep the data set relatively small, and have added a fake unique ID value.
 
-## Get the data set
-
-Ordinarily we would send you the data for your organisation on request. For this session, we've prepared the synthetic data set as a Stata-format (.dta) file.
-
-
-You can download it to your machine with the `download.file()` function. Save it to the `data/` folder of your project using the `destfile` argument.
-
-```{r download-file, eval=FALSE}
-download.file(
-  url = "",
-  destfile = "data/csps_synth.dta"
-)
-```
-
 The variables are in the synthetic data set are:
 
-* ResponseID (unique respondent identifier) and OverallDeptCode (the department name)
+* ResponseID (a faked unique respondent identifier) and OverallDeptCode (the department name)
 * B01 to B05 (questions about 'my work') and B47 to B51 (engagement questions)
 * E03 and E03_GRP (have you been bullied or harassed n the past 12 months?) and E03A_1 to E03A_16 (a column for each possible response to the bullying, harassment or discrimination experienced)
 * W01 to W04 (wellbeing questions)
@@ -451,9 +440,26 @@ The variables are in the synthetic data set are:
 * ees (a derived variable that translates each engagement question score to a percentage and takes the mean)
 * mw_p (a derived variable that gives the proportion of responses to the 'my work' theme questions that were positive, i.e. 'agree' or 'strongly agree')
 
+## Get the data set
+
+Ordinarily we would send you the data for your organisation on request. For this session, we've prepared the synthetic data set as a Stata-format (.dta) file.
+
+You can download it to your machine with the `download.file()` function. Save it to the `data/` folder of your project using the `destfile` argument.
+
+```{r download-file, eval=FALSE}
+download.file(
+  url = "",
+  destfile = "data/csps_synth.dta"  # where to save it
+)
+```
+
+Take a look at the Files pane in RStudio. Navigate into the `data/` folder. The .dta file should now be in there.
+
 # Read
 
-The {haven} package has a function called `read_stata()` that you can pass the file path to. Let's read in the data with this function and name it 'data'.
+There's a number of functions for reading in data to R. A common one is `read_csv()` from the tidyverse's {readr} package.
+
+The {haven} package has a function called `read_stata()` that you can use to read in a .dta file. Let's read in the data with this function and name the object 'data'.
 
 ```{r haven-read}
 data <- read_stata(file = "data/csps_synth.dta")
@@ -464,7 +470,7 @@ This will read the data in as a 'tibble', a fancier type of data frame that's us
 <br>
 <div class="activity"> `r icon::fa("edit")` <b>Activity</b>
 
-* How do you know that the data has been successfully read?
+How do you know that the data has been successfully read into R?
 
 </div>
 <br>
@@ -517,29 +523,28 @@ You can also access this by clicking the little image of a table to the right of
 
 We're going to use a number of functions from the {dplyr} package, which we loaded earlier, to practice some data manipulation.
 
-Functions in the tidyverse suite of packages are usually verbs that describe what they're doing. We'll look at `select()` and `filter()`, for example.
+Functions in the tidyverse suite of packages are usually verbs that describe what they're doing, like `select()` and `filter()`.
 
 We won't have time to go thorugh all of the functions and their variants, but you should get a flavour of what's possible.
 
 ## Select columns
 
-Firstly, we can `select()` columns of interest. This means we can return a version of the data set composed of a smallernumber of columns. This can be helpful for a number of reasons, but one simple one is so that we can focus on specfic variables of interset.
+Firstly, we can `select()` columns of interest. This means we can return a version of the data set composed of a smaller number of columns. This can be helpful for a number of reasons, but inparitcular it lets us focus on specfic variables of interest.
 
-The {dplyr} functions take the data frame as their first argument. 
+The {dplyr} functions take the data frame as their first argument, so the first thing we'll supply the function is our `data` object. Then we can supply the names of columns that we want to keep. Note that we can also rename columns as we select them with the format `new_name = old_name`. (Alternatively there is a `rename()` function that only renames columns.)
 
-Note that we can also rename columns as we select them with the format `new_name = old_name`. (Alternatively there is a `rename()` function that only renames columns.)
 
 ```{r select}
 # Return specific columns
 select( 
   data,                 # the first argument is the data
-   Z02, ethnicity = J03  # then the columns to keep
+  Z02, ethnicity = J03  # then the columns to keep
 )
 ```
 
-Note that the order you select the columns is the order they'll appear when they print.
+See that the order in which we selected the columns is the order in which they appeared when printed.
 
-Instead of naming columns to keep, you can specify columns to remove by prefixing the column name with a `-` (minus).
+Instead of naming columns to keep, you can also specify columns to remove by prefixing the column name with a `-` (minus).
 
 <br>
 <div class="tip"> `r icon::fa("lightbulb")` <b>Tip</b>
@@ -552,7 +557,7 @@ Instead of naming columns to keep, you can specify columns to remove by prefixin
 </div>
 <br>
 
-To save time you can use some special `select()` helper functions. For example, you can select a column that `contains()` or `starts_with()` certain strings. This is useful if you have lots of columns that share a simmilarity in their names, like the CSPS questions (e.g. B01, B02, etc, all start with "B").
+To save time you can use some special `select()` helper functions. For example, you can select a column that `contains()` or `starts_with()` certain strings. This is useful if you have lots of columns that share a simmilarity in their names, like in the CSPS (e.g. B01, B02, etc, all start with "B").
 
 ```{r select-3}
 # Use select helpers to make code concise
@@ -581,7 +586,7 @@ We're going to make use of some [logical operators](https://stat.ethz.ch/R-manua
 | :-- | :-- | :-- |
 | `==` |  Equal to |  `5 == 2 + 3` returns `TRUE` |
 | `!=` |  Not equal to |  `5 != 3 + 3` returns `TRUE` |
-| `%in%` | Shortcut to match to a vector | `4 %in% c(2, 4, 6)` returns `TRUE` |
+| `%in%` | Match to a vector (shortcut for multiple logical tests) | `4 %in% c(2, 4, 6)` returns `TRUE` |
 | `>`, `<` | Greater than, less than | `2 < 3` returns `TRUE` |
 | `>=`, `<=` | Equal or greater than, equal or less than | `5 <= 5` returns `TRUE` |
 | `&` | And (helps string together multiple filters) | `1 < 2 & 5 == 5` returns `TRUE` |
@@ -608,18 +613,19 @@ scs_orgs <- filter(
 
 See how there are two filter statements: `Z02 == 5` and `Organisation %in% c("ORGB", "ORGC")`? We're asking for both of these things to be true by using the `&` operator between them.
 
-Notice that we used `%in%` to match to a vector of department names. These are stored as character strings, so we put them in quotation marks.
+Notice that we used `%in%` to match to a vector of department names (this is quicker than writing `OverallDeptCode == ORGB | OverallDeptCode == ORGC`). The names are stored as character strings, so we put them in quotation marks.
 
-Let's check the columns of interest to see if it worked:
+We could print the columns of interest to see if it worked, but a better method would be to return only the 'distinct' (unique) values in these columns:
 
-```{r filter-result}
-select(scs_orgs, OverallDeptCode, Z02)
+```{r filter-distinct}
+distinct(scs_orgs, OverallDeptCode, Z02)
 ```
 
 <br>
 <div class="activity"> `r icon::fa("edit")` <b>Activity</b>
 
 1. Use `filter()` to return senior civil servants in Org A only
+2. Use `distinct()` to make sure it's worked
 2. How many rows are in this filtered data set?
 
 `r countdown(minutes = 2, seconds = 0, style = "position: relative; width: min-content;")`
@@ -629,11 +635,11 @@ select(scs_orgs, OverallDeptCode, Z02)
 
 ## Add new columns
 
-Now to create new columns. The function name is `mutate()`: we're 'mutating' our dataframe by budding a new column where there wasn't one before. Often you'll be creating new columns based on the content of columns that already exist, like adding the contents of one to another.
+Now to create new columns. The function name is `mutate()`; we're 'mutating' our dataframe by budding a new column where there wasn't one before. Often you'll be creating new columns based on the content of columns that already exist, like adding the contents of one to another.
 
 One relevant use of this for the CSPS is to create dummy columns. If certain conditions are met in other columns, we can put a '1' in the dummy column, else we can put '0' if it's not met.
 
-So we could create a dummy column that flags when a respondent is a SEO/HEO grade
+So we could create a dummy column that flags when a respondent is a SEO/HEO grade. This example uses an `ifelse()` statement that fills the column with one value if the logical test is `TRUE` and another if it's `FALSE`.
 
 ```{r mutate}
 # Add a column that gets a 1 when the condition is true
@@ -641,7 +647,7 @@ data_dummy <- mutate(
   data,
   dummy = ifelse(  # create a new column called 'dummy'
     test = Z02 == 3 & J03 %in% 1:4, # test this condition
-    yes = 1,       # if true, put a 1 in the dummy column
+    yes = 1,       # if TRUE, put a 1 in the dummy column
     no = 0         # otherwise put a 0 in the column
   )
 )
@@ -666,7 +672,7 @@ Use `mutate()` to create a dummy column where:
 
 This function is particularly useful for the CSPS data if we want to overwrite our numeric values with their corresponding text labels. Fortunately, the {haven} package that we loaded earlier has a function that replaces the numeric values with their labels: `as_factor()`.
 
-We want to apply this only to the columns that are numeric. Fortunately there's a variant of `mutate()` called `mutate_if()`. In `mutate_if()` You can use a logical statement, like we did for `filter()`
+We want to apply this only to the columns that are numeric. Fortunately there's a variant of `mutate()` called `mutate_if()`, which lets you use logical statements to select columns. This means we don't have to write out all their names.
 
 ```{r as-factor, eval=FALSE}
 # Add a column that gets a 1 when the condition is true
@@ -692,18 +698,11 @@ glimpse(data_lbl_chr)
 
 ## Join
 
-We can use the join functions to merge two data frames together on a common column.
+We can use variant `join()` functions to merge two data frames together on a common column.
 
 Let's create a small trivial data frame that provides a lookup from department codes to full department names and merge it into our CSPS data.
 
-<br>
-<div class="tip"> `r icon::fa("lightbulb")` <b>Tip</b>
-
-* We'll use the `tibble()` function from {dplyr} to build the data frame
-* Tibbles are data frames with nice defaults and printing properties; we've seen them already in the outputs from our earlier wrangling with {dplyr}
-
-</div>
-<br>
+We'll use the `tibble()` function from {dplyr} to build the data frame. Remember: tibbles are data frames with nice defaults and printing properties; we've seen them already in the outputs from our earlier wrangling with {dplyr}
 
 ```{r dept-lookup}
 lookup <- tibble(
@@ -714,9 +713,9 @@ lookup <- tibble(
 print(lookup)
 ```
 
-We want what is perhaps the most common join: `left_join()`. It gives you all the rows from the 'left' data set and merges on the columns from the 'right'.
+We want what is perhaps the most common join: `left_join()`. It gives you all the rows from the 'left' data set (in our case, `data`) and merges on the columns from the 'right' (our new `lookup`).
 
-Here's what we're doing (gif by [Garrick Aden-Buie](https://www.garrickadenbuie.com/project/tidyexplain/)):
+Here's what we'll be doing (gif by [Garrick Aden-Buie](https://www.garrickadenbuie.com/project/tidyexplain/)):
 
 <img src="img/left-join.gif">
 
@@ -724,8 +723,8 @@ To do this, we pass two data frames to arguments `x` ('left') and `y` ('right') 
 
 ```{r left-join}
 data_join <- left_join(
-  x = data,    # the original data set ('left')
-  y = lookup,  # the data to merge on ('right')
+  x = data,    # the original data set
+  y = lookup,  # the data to merge to it 
   by = "OverallDeptCode"  # the common column between them 
 )
 ```
@@ -772,7 +771,7 @@ dataset %>%
 
 A real example with our data might look like this:
 
-```{r pipe, eval=FALSE}
+```{r pipe}
 data_piped <- data %>% 
   select(ResponseID, OverallDeptCode, B01, Z02) %>% 
   filter(OverallDeptCode == "ORGA" & Z02 != 5) %>% 
@@ -839,14 +838,16 @@ The tidyverse package for plotting is called {ggplot2}. The 'gg' stands for 'gra
 
 You also supply aesthetic properties like size, colour, x and y locations.
 
+<center><img src="img/ggplot2-cheat.png" width="70%"></center><br>
 
-<center><img src="img/ggplot2-cheat.png" width="50%"></center><br>
-
-To add these layers you use a `+`. Imagine you've created a blank canvas and you're building up your image layer by layer. (This is different to using the pipe, `%>%`, which is passing information from the left-hand side to the right-hand side.)
+These elements are built up with the `+` operator. Imagine you've created a blank canvas and you're adding each layer. (This is different to using the pipe, `%>%`, which is passing information from the left-hand side to the right-hand side.)
 
 The great thing about building plots with code is that you can produce them with the same styles very quickly without all the manual adjustments that might be required in some other programs.
 
+{ggplot2} is a very powerful graphics package that can create all sorts of charts. Check out [the R Graph Gallery](https://www.r-graph-gallery.com/) for some more examples.
+
 ## Simple plots
+
 For now, let's look at a simple bar chart of the answers to question B01 using the `ggplot()` function from {ggplot2}.
 
 ```{r plot-simple}
@@ -860,17 +861,16 @@ plot_data <- data %>%
   )  
 
 # Plot the data
-ggplot(
-  plot_data,
-  aes(x = B01, y = n)) +
-  geom_col()
+plot_data %>%  # with the plot data
+  ggplot(aes(x = B01, y = n)) +  # create a canvas with these coords
+  geom_col()  # apply columns to the canvas given the coords
 ```
 
 What just happened? We:
 
 * gave ggplot() the dataset, `plot_data`
 * gave it some aesthetic mappings, `aes()` (in this case, the x and y variables)
-* used the column geom, `geom_col()`, to make a bar chart
+* added the column geom, `geom_col()`, to make a bar chart
 
 We can spruce this up a little by adding on additional things like a theme or labels.
 
@@ -910,7 +910,7 @@ ggplot(plot_data, aes(x = B01, y = n))  +
 ```
 
 ## Advanced plot
-We can also use {ggplot} to recreate the style of bar charts used in the PDF reports of People Survey results. First we need to process the data to get the data for ORG B, reshape it into a plottable format, and calculate percentages.
+We can also use {ggplot} to recreate the style of bar charts used in the PDF reports of People Survey results. First we need to process the data to get the data for ORGB, reshape it into a plottable format, and calculate percentages. This section uses a couple of tidyverse packages we haven't seen yet: {tidyr} for reshaping data frames and {forcats} for working with vectors. These are shown as `package::function()` to make them more apparent.
 
 ``` {r plot-data2}
 plot_data2 <- data %>%
@@ -945,7 +945,13 @@ print(plot_data2)
 
 We now have a dataset that has counted the responses for each question-value pair (`response_count`), the number of responses for each question (`question_count`) and a percentage response (`pc`), for questions B47-B52 for respondents in ORGB.
 
-We can now plot this data, rather than Department we'll be plotting the questions on the "x-axis" and our calculated percentage on the "y-axis" (we'll actually flip these axis, but that's one of the last things we do, so it's best to still think of these in their original x-y positions). We can also add data labels, using `geom_text()`. The PDF survey reports use a colourblind friendly pink-green scale from the [{RColorBrewer}](https://cran.r-project.org/package=RColorBrewer) package, which provides the palettes developed by the [Color Brewer](http://colorbrewer2.org/) project. Finally, we apply some customisation to the theme to remove the axis titles, reposition the legend, give the legend keys an outline, and format the title text.
+We can now plot this data, rather than Department we'll be plotting the questions on the "x-axis" and our calculated percentage on the "y-axis" (we'll actually flip these axes, but that's one of the last things we do, so it's best to still think of these in their original x-y positions).
+
+We can also add data labels, using `geom_text()`.
+
+The PDF survey reports use a colourblind friendly pink-green scale from the [{RColorBrewer}](https://cran.r-project.org/package=RColorBrewer) package, which provides the palettes developed by the [Color Brewer](http://colorbrewer2.org/) project.
+
+Finally, we apply some customisation to the theme to remove the axis titles, reposition the legend, give the legend keys an outline, and format the title text.
 
 ``` {r plot-stacked2}
 
@@ -997,8 +1003,6 @@ ggplot(plot_data2, aes(x = question, y = pc)) +
     plot.title = element_text(face = "bold"))
 
 ```
-
-{ggplot2} is a very powerful graphics package that can crate all sorts of charts. Check out [the R Graph Gallery](https://www.r-graph-gallery.com/) for some more examples.
 
 # Learn more
 
