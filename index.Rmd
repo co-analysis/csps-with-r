@@ -32,6 +32,28 @@ There's a lot of material about R and about the CSPS data that we aren't going t
 
 We'll be developing this guidance and making it freely available on the web. It will include more information on tidying, analysing, plotting and reporting.
 
+**Important note on the data**: the data used in this document **is not real data**. Instead, it's a 'synthetic' version created using [the {synthpop} package](https://cran.r-project.org/web/packages/synthpop/vignettes/synthpop.pdf). This preserves data distributions without any response being that sampled from a real individual.
+
+## Code along
+
+This session is designed as a 'code-along'. You'll be asked to type what you see on screen as we go along.
+
+Ideally you have R and RStudio installed already and you are able to download packages. In which case, you can do everything outlined in this document from your computer.
+
+If you don't have R and RStudio and you can't download packages, then you can use a cloud-hosted version of RStudio which will open in your browser. Click this button below to launch it:
+
+<!-- badges: start -->
+[![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/matt-dray/csps-with-r-demo/master?urlpath=rstudio)
+<!-- badges: end -->
+
+You may need to try more than once for it to load, or try a new browser if it repeatedly fails.
+
+This is not how you would normally access RStudio; this has been set up so you are able to follow along with the demonstrations in the session. 
+
+After a period of inactivity, your instance of RStudio will shut down. Note that anything code you write won't be preserved. You will need to copy, paste and save anything you write into a file on your computer instead.
+
+Note that you won't be able to install any packages, but the packages of the tidyverse have been installed for you. You can access them with a call to `library(tidyverse)`. The data have also been supplied in the `data/` folder.
+
 ## Background
 
 The annual CSPS produces a lot of data each year. Departments are provided with summary reports, but can access response-level data ('microdata') to perform their own in-depth analyses.
@@ -448,12 +470,14 @@ You can download it to your machine with the `download.file()` function. Save it
 
 ```{r download-file, eval=FALSE}
 download.file(
-  url = "",
+  url = "https://github.com/co-analysis/csps-synth/blob/master/output/csps_synth.dta",
   destfile = "data/csps_synth.dta"  # where to save it
 )
 ```
 
-Take a look at the Files pane in RStudio. Navigate into the `data/` folder. The .dta file should now be in there.
+Alternatively, you can visit the link and click the 'download' button,then save it to the `data/` folder of your project.
+
+Now take a look at the 'Files' pane in RStudio. Navigate into the `data/` folder. The .dta file should now be in there.
 
 # Read
 
@@ -790,6 +814,34 @@ So the steps for creating the `data_piped` object are:
 This is a bit like a recipe. And it's easier to read.
 
 You also repeat yourself fewer times. We only to name the `data` object once, a the very start. This minimises the chance that you'll accidentally name the wrong object by mistake.
+
+## Save your wrangled data
+
+There are a number of ways and formats in which to save our wrangled data.
+
+For example, to save the output as a CSV, we can do one of these:
+
+```{r write-files, eval=FALSE}
+write_dta(data_piped, "output/data_piped.dta")  # Stata-format
+
+# Other options
+write_rds(data_piped, "output/data_piped.rds")  # R-specific format
+write_csv(data_piped, "output/data_piped.csv")  # comma-separated values
+```
+
+You pass to the function the object name and the filepath for where you want it to be saved.
+
+Note that the labels will be lost if you save as CSV, but they're retained in .dta and .rds format.
+
+Check in your `output/` folder to make sure they've been saved.
+
+You can then read these back in like how we did earlier in this document (you don't have to do this now):
+
+```{r read-files, eval=FALSE}
+data_rds <- read_rds("output/data_piped.rds")  # R-specific format
+data_dta <- read_stata("output/data_piped.dta")  # Stata-format
+data_csv <- read_csv("output/data_piped.csv")  # comma-separated values
+```
 
 # Summarise
 
