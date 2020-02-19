@@ -36,23 +36,27 @@ We'll be developing this guidance and making it freely available on the web. It 
 
 ## Code along
 
-This session is designed as a 'code-along'. You'll be asked to type what you see on screen as we go along.
+This session is designed as a 'code-along'. You'll be asked to type what you see on screen as we progress
 
 Ideally you have R and RStudio installed already and you are able to download packages. In which case, you can do everything outlined in this document from your computer.
 
-If you don't have R and RStudio and you can't download packages, then you can use a cloud-hosted version of RStudio which will open in your browser. Click this button below to launch it:
+Don't worry if you don't have R and RStudio downloaded, or you can't download packages. Instead, we've set up an instance of RStudio in the cloud for this training session, using a non-profit service called Binder.
+
+Click the button below to launch RStudio in your browser with Binder. It may take a few moments to load; retry or switch browser if it fails.
 
 <!-- badges: start -->
 [![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/matt-dray/csps-with-r-demo/master?urlpath=rstudio)
 <!-- badges: end -->
 
-You may need to try more than once for it to load, or try a new browser if it repeatedly fails.
+In this RStudio instance, the folder structure is set up and the packages and data are pre-installed for you, so you **won't** need to follow the steps in:
 
-This is not how you would normally access RStudio; this has been set up so you are able to follow along with the demonstrations in the session. 
+* section 2.5: Project folders
+* section 3.6: Install and load packages (don't use `install.packages()`, but do use `library()`)
+* section 4.2: Download the data
 
-After a period of inactivity, your instance of RStudio will shut down. Note that anything code you write won't be preserved. You will need to copy, paste and save anything you write into a file on your computer instead.
+Note that This is not how you would normally access RStudio; this has been set up so you are able to follow along with the demonstrations in the session. 
 
-Note that you won't be able to install any packages, but the packages of the tidyverse have been installed for you. You can access them with a call to `library(tidyverse)`. The data have also been supplied in the `data/` folder.
+After a period of inactivity, your instance of Binder will shut down. Note that anything code you write won't be preserved. You will need to copy, paste and save anything you write into a file on your computer instead.
 
 ## Background
 
@@ -120,6 +124,15 @@ Labelled in the image are:
 We don't need to concern ourselves with every button and tab for now. 
 
 ## Project folders
+
+
+<br>
+<div class="binder"> `r icon::fa("address-book")` <b>Binder users</b>
+
+Binder users: you don't need to run this section because you are already working in a Project folder with the correct folder structure.
+
+</div>
+<br>
 
 There are many benefits to having one folder per analytical project. It means your work is more:
 
@@ -386,6 +399,14 @@ add_nums(val_a = 3, val_b = 4)  # use the function
 
 ## Install and load packages
 
+<br>
+<div class="binder"> `r icon::fa("address-book")` <b>Binder users</b>
+
+Binder users: you don't need to use `install.packages()` because the packages have already been installed for you; you will need to use `library()` though.
+
+</div>
+<br>
+
 Functions can be bundled into packages. A bunch of packages are pre-installed with R, but there are thousands more available for download. These packages extend the basic capabilities of R or improve them.
 
 Packages can be installed to your computer using the `install.packages()` function. This automatically fetches and downloads packages from a centralised package database on the internet called [CRAN](https://cran.r-project.org), which only accepts packages that meet strict quality criteria.
@@ -463,6 +484,14 @@ The variables are in the synthetic data set are:
 * mw_p (a derived variable that gives the proportion of responses to the 'my work' theme questions that were positive, i.e. 'agree' or 'strongly agree')
 
 ## Get the data set
+
+<br>
+<div class="binder"> `r icon::fa("address-book")` <b>Binder users</b>
+
+Binder users: You don't need to run this section because the data set is already in your `data/` folder.
+
+</div>
+<br>
 
 Ordinarily we would send you the data for your organisation on request. For this session, we've prepared the synthetic data set as a Stata-format (.dta) file.
 

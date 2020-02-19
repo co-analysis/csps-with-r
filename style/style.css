@@ -6,6 +6,12 @@
 
 .tip {
     padding: 10px 40px;
-    background: #cacac8;
+    background: #57bab7;
+    border-radius: 10px;
+}
+
+.binder {
+    padding: 10px 40px;
+    background: #ecac00;
     border-radius: 10px;
 }
