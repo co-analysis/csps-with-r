@@ -38,10 +38,3 @@ rsconnect/
 
 # Mac DS Store
 .DS_Store
-
-# Data
-*.dta
-*.RDS
-*.rds
-*.csv
-*.xlsx
