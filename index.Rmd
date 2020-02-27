@@ -504,12 +504,13 @@ You could also download the file to your machine with the `download.file()` func
 
 ```{r download-file, eval=FALSE}
 # The location of the data on the internet
-path <- "https://github.com/co-analysis/csps-synth/blob/master/output/csps_synth.dta?raw=true"
+path <-
+  "https://github.com/co-analysis/csps-with-r/blob/master/data/csps_synth.dta?raw=true"
 
 # Download from the internet to your computer
 download.file(
   url = path,  # the path to the file on the internet
-  destfile = "data/csps_synth.dta",  # where to save the file
+  destfile = "data/csps_synth.dta",  # where to save on your computer
   mode = "wb"  # save as a 'binary file'
 )
 ```
