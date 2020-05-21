@@ -45,7 +45,7 @@ Don't worry if you don't have R and RStudio downloaded, or you can't download pa
 Click the button below to launch RStudio in your browser with Binder. It may take a few moments to load; retry or switch browser if it fails.
 
 <!-- badges: start -->
-[![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/matt-dray/csps-with-r-demo/master?urlpath=rstudio)
+[![Launch Rstudio Binder](http://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/matt-dray/csps-with-r-demo/master?urlpath=rstudio){target='_blank'}
 <!-- badges: end -->
 
 In this RStudio instance, the folder structure is set up and the packages and data are pre-installed for you, so you **won't** need to follow the steps in:
