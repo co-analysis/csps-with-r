@@ -103,7 +103,7 @@ Before starting, you should download:
 * [R](https://cran.ma.imperial.ac.uk/)
 * [RStudio Desktop](https://rstudio.com/products/rstudio/download/) (open-source license)
 
-Both are free, but you might need to get in touch with your IT team to get them insalled to your computer.
+Both are free, but you might need to get in touch with your IT team to get them installed to your computer.
 
 ## RStudio layout
 
@@ -263,7 +263,7 @@ print(my_num)
 <br>
 <div class="tip"> `r icon::fa("lightbulb")` <b>Tip</b>
 
-* You can actually print an object by running it's name alone:
+* You can actually print an object by running its name alone
 * Running `my_num` is equivalent to `print(my_num)`
 * I'll be using `print()` throughout to be more explicit
 
@@ -431,7 +431,7 @@ We're going to use a few packages to help us:
 <div class="tip"> `r icon::fa("lightbulb")` <b>Tip</b>
 
 * {haven}, {dplyr} and {ggplot2} are part of a larger suite of packages called ['the tidyverse'](https://www.tidyverse.org/)
-* This is a set of packages that share a common design philosophy and seek to make analysis more intuituve
+* This is a set of packages that share a common design philosophy and seek to make analysis more intuitive
 * The RStudio company produces the majority of the packages in the tidyverse
 * You can download all the packages of the tidyverse at once with `install.packages("tidyverse")`
 
@@ -560,7 +560,7 @@ The numbers encode certain responses. For example, 1 means 'strongly disagree' a
 
 How do we know what all the numeric values mean? You'll see that a number of the columns have the label class (`<lbl>`) too. This means that the column carries additional 'attributes' that give the corresponding labels for the values.
 
-Labels aren't used that freuqently in R data frames, but are used in programs like Stata and SPSS. Since we've read in a Stata file, we've got these labels available to us.
+Labels aren't used that frequently in R data frames, but are used in programs like Stata and SPSS. Since we've read in a Stata file, we've got these labels available to us.
 
 You can also see that there are also lots of `NA` values. R uses `NA` to mean 'not available' -- the data are missing. In this case, it means that the respondent didn't supply an answer for that question.
 
@@ -574,7 +574,7 @@ print(data)
 
 The output is displayed in table format, but is truncated to fit the console window (this prevents you from printing millions of rows to the console!). You can see the labels are printed alongside the values in this view.
 
-If you want to see the whole datset you could use the `View()` function:
+If you want to see the whole dataset you could use the `View()` function:
 
 ```{r View, eval=FALSE}
 View(data) # note the capital 'V'
@@ -590,11 +590,11 @@ We're going to use a number of functions from the {dplyr} package, which we load
 
 Functions in the tidyverse suite of packages are usually verbs that describe what they're doing, like `select()` and `filter()`.
 
-We won't have time to go thorugh all of the functions and their variants, but you should get a flavour of what's possible.
+We won't have time to go through all of the functions and their variants, but you should get a flavour of what's possible.
 
 ## Select columns
 
-Firstly, we can `select()` columns of interest. This means we can return a version of the data set composed of a smaller number of columns. This can be helpful for a number of reasons, but inparitcular it lets us focus on specfic variables of interest.
+Firstly, we can `select()` columns of interest. This means we can return a version of the data set composed of a smaller number of columns. This can be helpful for a number of reasons, but in particular it lets us focus on specific variables of interest.
 
 The {dplyr} functions take the data frame as their first argument, so the first thing we'll supply the function is our `data` object. Then we can supply the names of columns that we want to keep. Note that we can also rename columns as we select them with the format `new_name = old_name`. (Alternatively there is a `rename()` function that only renames columns.)
 
@@ -622,7 +622,7 @@ Instead of naming columns to keep, you can also specify columns to remove by pre
 </div>
 <br>
 
-To save time you can use some special `select()` helper functions. For example, you can select a column that `contains()` or `starts_with()` certain strings. This is useful if you have lots of columns that share a simmilarity in their names, like in the CSPS (e.g. B01, B02, etc, all start with "B").
+To save time you can use some special `select()` helper functions. For example, you can select a column that `contains()` or `starts_with()` certain strings. This is useful if you have lots of columns that share a similarity in their names, like in the CSPS (e.g. B01, B02, etc, all start with "B").
 
 ```{r select-3}
 # Use select helpers to make code concise
@@ -665,7 +665,7 @@ R also has some special shortcut functions for come logical checks. For example:
 | `is.character()` | Is the content character class? | `is.character("Downing Street")` returns `TRUE` |
 | `is.na()` | Is the content an `NA`? | `is.na(NA)` returns `TRUE` |
 
-You can negate these funtions by preceding them with a `!`, so `is.na(NA)` returns `TRUE` but `!is.na(NA)` returns `FALSE`.
+You can negate these functions by preceding them with a `!`, so `is.na(NA)` returns `TRUE` but `!is.na(NA)` returns `FALSE`.
 
 Let's start by creating an object that contains the data filtered for senior civil servants (where variable Z02 equals 5) from two of the organisations.
 
