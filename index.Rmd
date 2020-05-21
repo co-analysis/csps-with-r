@@ -107,7 +107,7 @@ Both are free, but you might need to get in touch with your IT team to get them 
 
 ## RStudio layout
 
-Open RStudio -- its icon is a white letter 'R' in a blue circle: <img src="img/rstudio-icon.png" width="5%>
+Open RStudio -- its icon is a white letter 'R' in a blue circle: <img src="img/rstudio-icon.png" width="5%">
 
 When you open RStudio for the first time, you'll see the window is split into three 'panes', which are numbered below:
 
